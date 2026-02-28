@@ -2,6 +2,9 @@
 
 基于 MDUI v1 + Express.js + HTML 的抽奖管理系统，使用 JSON 文件存储数据。
 
+![1772248668969.png](https://69.888440.xyz/global-optcn/2026/02/28/1/69a25e5f4df8f.png)
+![1772248654475.png](https://69.888440.xyz/global-optcn/2026/02/28/1/69a25e5f17512.png)
+
 ## 功能特性
 
 ### 管理后台
