@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const requestIp = require('request-ip');
 
 const app = express();
 const PORT = 3000;
@@ -11,6 +12,7 @@ app.set('jwtSecret', '8bnohidjisnk8u84l3ncal7b4dhxtun');
 
 // 中间件
 app.use(bodyParser.json());
+app.use(requestIp.mw());
 app.use(express.static('public'));
 
 // 确保数据目录存在
@@ -31,6 +33,11 @@ initDataFile('admin.json', { username: 'admin', password: 'admin123' });
 initDataFile('lotteries.json', []);
 initDataFile('codes.json', []);
 initDataFile('results.json', []);
+
+// 根路径重定向到抽奖页面
+app.get('/', (req, res) => {
+  res.redirect('/lottery.html');
+});
 
 // 路由
 app.use('/api/admin', require('./routes/admin'));

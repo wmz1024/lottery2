@@ -3,8 +3,9 @@ let currentLottery = null;
 let theWheel = null;
 let isSpinning = false;
 let marqueeInterval = null;
+let browserFingerprint = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // 检查主题
   const theme = localStorage.getItem('theme') || 'light';
   if (theme === 'dark') {
@@ -17,6 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Winwheel 库未加载，请检查网络连接');
   } else {
     console.log('Winwheel 库加载成功');
+  }
+  
+  // 生成浏览器指纹
+  try {
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    browserFingerprint = result.visitorId;
+    console.log('浏览器指纹:', browserFingerprint);
+  } catch (error) {
+    console.error('生成浏览器指纹失败:', error);
+    browserFingerprint = 'unknown';
   }
   
   // 检查URL参数
@@ -95,7 +107,7 @@ function verifyCode() {
   fetch('/api/lottery/verify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ code })
+    body: JSON.stringify({ code, fingerprint: browserFingerprint })
   })
   .then(res => res.json())
   .then(data => {
@@ -115,13 +127,44 @@ function verifyCode() {
         // 已经抽过奖，显示结果
         showResult(data.result);
       } else {
-        // 显示抽奖界面
-        showLotteryMain();
+        // 检查是否需要邮箱
+        if (currentLottery.requireEmail) {
+          showEmailInput();
+        } else {
+          // 显示抽奖界面
+          showLotteryMain();
+        }
       }
     } else {
       mdui.snackbar({ message: data.message });
     }
   });
+}
+
+function showEmailInput() {
+  document.getElementById('codeInput').style.display = 'none';
+  document.getElementById('emailInput').style.display = 'block';
+}
+
+function submitEmail() {
+  const email = document.getElementById('userEmail').value.trim();
+  if (!email) {
+    mdui.snackbar({ message: '请输入邮箱地址' });
+    return;
+  }
+  
+  // 简单的邮箱格式验证
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    mdui.snackbar({ message: '请输入有效的邮箱地址' });
+    return;
+  }
+  
+  // 保存邮箱到本地，稍后提交时一起发送
+  currentLottery.userEmail = email;
+  
+  document.getElementById('emailInput').style.display = 'none';
+  showLotteryMain();
 }
 
 function showLotteryMain() {
@@ -149,13 +192,22 @@ function showResult(result) {
   if (result.prize) {
     document.getElementById('resultTitle').textContent = '恭喜中奖！';
     document.getElementById('resultPrize').textContent = result.prize;
+    
+    // 显示兑换码
+    if (result.redeemCode) {
+      document.getElementById('redeemCodeSection').style.display = 'block';
+      document.getElementById('redeemCodeText').textContent = result.redeemCode;
+    } else {
+      document.getElementById('redeemCodeSection').style.display = 'none';
+    }
   } else {
     document.getElementById('resultTitle').textContent = '很遗憾';
     document.getElementById('resultPrize').textContent = '未中奖';
+    document.getElementById('redeemCodeSection').style.display = 'none';
   }
   
   document.getElementById('resultTime').textContent = 
-    '抽奖时间: ' + new Date(result.timestamp).toLocaleString();
+    '抽奖时间: ' + formatLocalTime(result.timestamp);
 }
 
 function initWheel() {
@@ -299,7 +351,11 @@ function startDraw() {
   fetch('/api/lottery/draw', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ code: currentCode })
+    body: JSON.stringify({ 
+      code: currentCode,
+      fingerprint: browserFingerprint,
+      email: currentLottery.userEmail || null
+    })
   })
   .then(res => res.json())
   .then(data => {
@@ -411,3 +467,19 @@ window.addEventListener('beforeunload', () => {
     clearInterval(marqueeInterval);
   }
 });
+
+
+// 格式化时间为本地时区
+function formatLocalTime(isoString) {
+  if (!isoString) return '-';
+  const date = new Date(isoString);
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+}

@@ -38,6 +38,11 @@ router.post('/login', (req, res) => {
   }
 });
 
+// 验证token是否有效
+router.get('/verify-token', authMiddleware, (req, res) => {
+  res.json({ success: true, username: req.user.username });
+});
+
 // 获取所有抽奖活动
 router.get('/lotteries', authMiddleware, (req, res) => {
   const lotteries = readData('lotteries.json');
@@ -163,9 +168,9 @@ router.get('/export/:lotteryId', (req, res) => {
   const results = readData('results.json');
   const lotteryResults = results.filter(r => r.lotteryId === req.params.lotteryId);
   
-  let csv = '抽奖码,中奖选项,抽奖时间,类型\n';
+  let csv = '抽奖码,中奖选项,抽奖时间,类型,浏览器指纹,IP地址,邮箱\n';
   lotteryResults.forEach(r => {
-    csv += `${r.code},${r.prize || '未中奖'},${r.timestamp},${r.isCoward ? '懦夫选项' : '正常抽奖'}\n`;
+    csv += `${r.code},${r.prize || '未中奖'},${r.timestamp},${r.isCoward ? '懦夫选项' : '正常抽奖'},${r.fingerprint || ''},${r.ip || ''},${r.email || ''}\n`;
   });
   
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
@@ -198,6 +203,69 @@ router.get('/export-codes/:lotteryId', (req, res) => {
   res.setHeader('Content-Type', 'text/csv; charset=utf-8');
   res.setHeader('Content-Disposition', `attachment; filename=lottery-codes-${req.params.lotteryId}.csv`);
   res.send('\uFEFF' + csv);
+});
+
+// 获取管理员账户信息
+router.get('/account', authMiddleware, (req, res) => {
+  const admin = readData('admin.json');
+  res.json({ success: true, username: admin.username });
+});
+
+// 更新管理员账户
+router.put('/account', authMiddleware, (req, res) => {
+  const { username, password } = req.body;
+  
+  if (!username) {
+    return res.json({ success: false, message: '用户名不能为空' });
+  }
+  
+  const admin = readData('admin.json');
+  admin.username = username;
+  if (password) {
+    admin.password = password;
+  }
+  
+  writeData('admin.json', admin);
+  res.json({ success: true });
+});
+
+// 获取库存信息
+router.get('/inventory/:lotteryId', authMiddleware, (req, res) => {
+  const lotteries = readData('lotteries.json');
+  const lottery = lotteries.find(l => l.id === req.params.lotteryId);
+  
+  if (!lottery) {
+    return res.json({ success: false, message: '抽奖活动不存在' });
+  }
+  
+  const results = readData('results.json');
+  const lotteryResults = results.filter(r => r.lotteryId === req.params.lotteryId);
+  
+  const inventory = lottery.options.map(option => {
+    const usedCount = lotteryResults.filter(r => {
+      if (option.range) {
+        return r.prize && r.prize.startsWith(option.name);
+      } else {
+        return r.prize === option.name;
+      }
+    }).length;
+    
+    const totalStock = option.stock || 0;
+    const totalCodes = option.codes ? option.codes.length : 0;
+    const usedCodes = option.codes ? option.codes.filter(c => c.used).length : 0;
+    
+    return {
+      name: option.name,
+      totalStock,
+      usedStock: usedCount,
+      remainingStock: totalStock === 0 ? 0 : Math.max(0, totalStock - usedCount),
+      hasCodes: !!option.codes,
+      totalCodes,
+      availableCodes: totalCodes - usedCodes
+    };
+  });
+  
+  res.json({ success: true, inventory });
 });
 
 module.exports = router;

@@ -40,6 +40,23 @@
       </div>
     </div>
 
+    <!-- 输入邮箱 -->
+    <div id="emailInput" class="mdui-card lottery-card" style="display: none;">
+      <div class="mdui-card-content">
+        <div class="mdui-typo-headline mdui-text-center">请填写联系邮箱</div>
+        <div class="mdui-typo-body-1 mdui-text-center mdui-text-color-theme-secondary mdui-m-t-1">
+          用于接收中奖通知
+        </div>
+        <div class="mdui-textfield mdui-m-t-3">
+          <label class="mdui-textfield-label">邮箱地址</label>
+          <input class="mdui-textfield-input" type="email" id="userEmail"/>
+        </div>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-btn-block mdui-m-t-2" onclick="submitEmail()">
+          继续抽奖
+        </button>
+      </div>
+    </div>
+
     <!-- 抽奖界面 -->
     <div id="lotteryMain" style="display: none;">
       <div class="mdui-card lottery-card">
@@ -73,6 +90,17 @@
         <div class="mdui-card-content mdui-text-center">
           <div class="mdui-typo-display-2" id="resultTitle"></div>
           <div class="mdui-typo-headline mdui-m-t-2" id="resultPrize"></div>
+          
+          <div id="redeemCodeSection" style="display: none;" class="mdui-m-t-2">
+            <div class="mdui-typo-subheading">兑换码/卡密</div>
+            <div class="mdui-card mdui-m-t-1" style="background: #f5f5f5; padding: 15px;">
+              <code id="redeemCodeText" style="font-size: 18px; color: #E91E63;"></code>
+            </div>
+            <div class="mdui-typo-caption mdui-text-color-theme-secondary mdui-m-t-1">
+              请妥善保管您的兑换码
+            </div>
+          </div>
+          
           <div class="mdui-typo-body-1 mdui-text-color-theme-secondary mdui-m-t-1" id="resultTime"></div>
         </div>
       </div>
@@ -87,6 +115,7 @@
   <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
   <script src="js/lottery.js"></script>
 </body>
 </html>

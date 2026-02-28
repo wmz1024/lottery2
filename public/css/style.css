@@ -494,3 +494,49 @@ body.mdui-theme-layout-dark {
     font-size: 20px;
   }
 }
+
+/* 侧边栏激活菜单项样式 */
+.mdui-list-item.active-menu-item {
+  background-color: rgba(63, 81, 181, 0.1);
+  color: #3F51B5;
+}
+
+.mdui-theme-layout-dark .mdui-list-item.active-menu-item {
+  background-color: rgba(63, 81, 181, 0.2);
+  color: #7986CB;
+}
+
+.mdui-list-item.active-menu-item .mdui-icon {
+  color: #3F51B5;
+}
+
+.mdui-theme-layout-dark .mdui-list-item.active-menu-item .mdui-icon {
+  color: #7986CB;
+}
+
+/* 侧边栏样式优化 */
+.mdui-drawer {
+  background-color: #fff;
+}
+
+.mdui-theme-layout-dark .mdui-drawer {
+  background-color: #1e1e1e;
+}
+
+.mdui-drawer .mdui-subheader {
+  color: rgba(0, 0, 0, 0.54);
+  font-weight: 500;
+}
+
+.mdui-theme-layout-dark .mdui-drawer .mdui-subheader {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 侧边栏菜单项悬停效果 */
+.mdui-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mdui-theme-layout-dark .mdui-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
