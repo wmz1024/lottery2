@@ -1,4 +1,4 @@
-# 抽奖管理系统
+# Lottery2 - 抽奖管理系统
 
 基于 MDUI v1 + Express.js + HTML 的抽奖管理系统，使用 JSON 文件存储数据。
 
