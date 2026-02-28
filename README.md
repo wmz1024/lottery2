@@ -1,164 +1,290 @@
-# Lottery2 - 抽奖管理系统
+# Lottery Management System
 
-基于 MDUI v1 + Express.js + HTML 的抽奖管理系统，使用 JSON 文件存储数据。
+A modern, feature-rich lottery management system built with Express.js, MDUI v1, and Bootstrap 5.
 
-![1772248668969.png](https://69.888440.xyz/global-optcn/2026/02/28/1/69a25e5f4df8f.png)
-![1772248654475.png](https://69.888440.xyz/global-optcn/2026/02/28/1/69a25e5f17512.png)
+[中文文档](README_CN.md)
 
-## 功能特性
+## Features
 
-### 管理后台
-- ✅ 添加/编辑/删除抽奖活动
-- ✅ 设置抽奖选项和中奖率（总和不超过100%）
-- ✅ 支持区间奖品（如硬盘空间 10GB-100GB，系统随机抽取）
-- ✅ 每个区间有独立的中奖概率
-- ✅ 自动计算不中奖概率
-- ✅ 添加懦夫选项（用户可直接获得，无需抽奖）
-- ✅ 生成/删除抽奖码（UUID格式）
-- ✅ 黑幕功能：
-  - 单个或批量设置抽奖码的固定中奖结果
-  - 支持指定具体奖品
-  - 支持指定区间奖品的具体数值
-  - 支持自定义区间范围
-  - 可随时修改或清除黑幕设置
-  - 已使用的抽奖码无法修改
-- ✅ 查看抽奖结果列表
-- ✅ 导出结果为CSV文件
-- ✅ 导出抽奖码为CSV文件
-- ✅ 分享抽奖链接
-- ✅ JWT Token 鉴权保护所有管理 API
-- ✅ Bootstrap 表格美化展示
+### Admin Panel
+- 🎯 **Lottery Management**: Create and manage multiple lottery campaigns
+- 🎁 **Prize Configuration**: 
+  - Set individual prize probabilities
+  - Support for range-based prizes (e.g., 10-100GB storage)
+  - Inventory management with stock limits
+  - Redemption codes/card keys for prizes
+- 🎭 **Blacklist System**: Set fixed prizes for specific lottery codes
+- 🎫 **Code Management**: Generate and manage lottery codes (UUID format)
+- 📊 **Results & Analytics**: View lottery results and export to CSV
+- 🔒 **Security Features**:
+  - JWT authentication with 24-hour token expiry
+  - Browser fingerprint tracking (FingerprintJS)
+  - IP address tracking and limiting
+  - Email collection option
+- 🎨 **Modern UI**: 
+  - MDUI v1 + Bootstrap 5 design
+  - Dark/Light theme toggle
+  - Responsive sidebar navigation
+  - Mobile-friendly interface
 
-### 用户前台
-- ✅ 通过抽奖码参与抽奖
-- ✅ 使用 Winwheel.js 的精美转盘界面
-- ✅ 明显的指针指示中奖位置
-- ✅ 后端执行抽奖逻辑
-- ✅ 区间奖品自动随机生成具体数值
-- ✅ 显示抽奖结果
-- ✅ 已抽奖用户可查看历史结果
+### User Interface
+- 🎰 **Interactive Wheel**: Smooth spinning animation using Winwheel.js
+- 🏆 **Live Updates**: Real-time marquee showing recent winners
+- 📱 **Mobile Optimized**: Fully responsive design with touch support
+- 🎁 **Coward Option**: Guaranteed prize option for risk-averse users
+- 🔐 **Anti-Fraud**: 
+  - One draw per code
+  - Optional fingerprint/IP restrictions
+  - Email verification support
 
-### UI设计
-- ✅ 简约高端设计
-- ✅ 无渐变色
-- ✅ 暗色/亮色主题切换
-- ✅ 响应式布局
-- ✅ 完美支持移动端（手机、平板）
-- ✅ 触摸优化，防止误触缩放
+## Tech Stack
 
-## 安装步骤
+- **Backend**: Node.js + Express.js
+- **Frontend**: HTML5 + JavaScript (Vanilla)
+- **UI Framework**: MDUI v1 + Bootstrap 5
+- **Wheel Library**: Winwheel.js
+- **Authentication**: JWT (jsonwebtoken)
+- **Fingerprinting**: FingerprintJS v3
+- **Data Storage**: JSON files
+- **Package Manager**: pnpm
 
-1. 安装依赖：
+## Installation
+
+### Prerequisites
+- Node.js (v14 or higher)
+- pnpm (recommended) or npm
+
+### Setup
+
+1. Clone the repository:
 ```bash
+git clone <repository-url>
+cd lottery-system
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+# or
 npm install
 ```
 
-2. 启动服务器：
+3. Start the server:
 ```bash
+pnpm start
+# or
 npm start
 ```
 
-或使用开发模式（自动重启）：
-```bash
-npm run dev
-```
+4. Access the application:
+- User Interface: `http://localhost:3000`
+- Admin Login: `http://localhost:3000/login.html`
+- Admin Panel: `http://localhost:3000/admin.html`
 
-3. 访问系统：
-- 管理后台: http://localhost:3000/admin.html
-- 用户抽奖: http://localhost:3000/lottery.html
+### Default Credentials
+- Username: `admin`
+- Password: `admin123`
 
-## 默认管理员账户
+**⚠️ Important**: Change the default credentials immediately after first login!
 
-- 用户名: `admin`
-- 密码: `admin123`
-
-可在 `data/admin.json` 文件中修改。
-
-## 目录结构
+## Project Structure
 
 ```
 lottery-system/
-├── server.js              # Express 服务器
-├── package.json           # 项目配置
-├── data/                  # JSON 数据存储
-│   ├── admin.json         # 管理员账户
-│   ├── lotteries.json     # 抽奖活动
-│   ├── codes.json         # 抽奖码
-│   └── results.json       # 抽奖结果
-├── public/                # 静态文件
-│   ├── admin.html         # 管理后台
-│   ├── lottery.html       # 用户抽奖页面
+├── data/                    # JSON data storage
+│   ├── admin.json          # Admin credentials
+│   ├── lotteries.json      # Lottery campaigns
+│   ├── codes.json          # Lottery codes
+│   └── results.json        # Draw results
+├── public/                  # Frontend files
 │   ├── css/
-│   │   └── style.css      # 自定义样式
-│   └── js/
-│       ├── admin.js       # 管理后台逻辑
-│       └── lottery.js     # 抽奖页面逻辑
-└── routes/                # API 路由
-    ├── admin.js           # 管理员 API
-    └── lottery.js         # 抽奖 API
+│   │   └── style.css       # Custom styles
+│   ├── js/
+│   │   ├── admin.js        # Admin panel logic
+│   │   ├── lottery.js      # User interface logic
+│   │   └── login.js        # Login page logic
+│   ├── admin.html          # Admin panel
+│   ├── login.html          # Login page
+│   └── lottery.html        # User lottery page
+├── routes/                  # API routes
+│   ├── admin.js            # Admin API endpoints
+│   └── lottery.js          # Lottery API endpoints
+├── server.js               # Express server
+├── package.json            # Dependencies
+└── README.md               # Documentation
 ```
 
-## 使用说明
+## API Endpoints
 
-### 创建抽奖活动
+### Admin APIs (Requires Authentication)
 
-1. 登录管理后台
-2. 点击"创建抽奖活动"
-3. 填写活动名称和描述
-4. 添加抽奖选项并设置中奖率
-5. （可选）勾选"区间奖品"设置数值范围
-   - 例如：硬盘空间 10-100GB
-   - 系统会在区间内随机抽取具体数值
-6. （可选）设置懦夫选项
-7. 保存活动
+#### Authentication
+- `POST /api/admin/login` - Admin login
+- `GET /api/admin/verify-token` - Verify JWT token
 
-### 生成抽奖码
+#### Lottery Management
+- `GET /api/admin/lotteries` - Get all lotteries
+- `POST /api/admin/lotteries` - Create lottery
+- `PUT /api/admin/lotteries/:id` - Update lottery
+- `DELETE /api/admin/lotteries/:id` - Delete lottery
 
-1. 在抽奖活动卡片中点击"抽奖码"
-2. 输入要生成的数量
-3. 点击"生成"
-4. 将抽奖码分发给用户
+#### Code Management
+- `GET /api/admin/codes/:lotteryId` - Get lottery codes
+- `POST /api/admin/codes` - Generate codes
+- `DELETE /api/admin/codes/:id` - Delete code
+- `POST /api/admin/codes/fixed-prize` - Set fixed prize (blacklist)
 
-### 设置黑幕（可选）
+#### Results & Export
+- `GET /api/admin/results/:lotteryId` - Get results
+- `GET /api/admin/export/:lotteryId` - Export results CSV
+- `GET /api/admin/export-codes/:lotteryId` - Export codes CSV
 
-1. 在抽奖码列表中选择一个或多个抽奖码
-2. 点击"批量设置黑幕"或单个抽奖码的"设置黑幕"按钮
-3. 选择固定的中奖奖品
-4. 如果是区间奖品，可以：
-   - 选择"随机"：在原区间内随机
-   - 选择"指定数值"：设置具体数值（如 50GB）
-   - 选择"自定义区间"：设置新的区间范围（如 80-100GB）
-5. 保存设置
-6. 带有黑幕的抽奖码会显示 🎭 标记
+#### Inventory & Settings
+- `GET /api/admin/inventory/:lotteryId` - Get inventory status
+- `GET /api/admin/account` - Get admin account info
+- `PUT /api/admin/account` - Update admin credentials
 
-### 分享抽奖
+### Public APIs
 
-1. 点击抽奖活动卡片中的"分享"
-2. 链接会自动复制到剪贴板
-3. 将链接发送给用户
+- `POST /api/lottery/verify` - Verify lottery code
+- `POST /api/lottery/draw` - Execute lottery draw
+- `POST /api/lottery/coward` - Get coward option prize
+- `GET /api/lottery/info/:lotteryId` - Get lottery info
+- `GET /api/lottery/recent-results/:lotteryId` - Get recent winners
 
-### 用户参与抽奖
+## Features in Detail
 
-1. 访问分享链接
-2. 输入抽奖码
-3. 点击转盘中心按钮开始抽奖
-4. 查看抽奖结果
+### Lottery Configuration
 
-## 技术栈
+When creating a lottery, you can configure:
 
-- 前端: MDUI v1, Bootstrap 5, HTML5, CSS3, JavaScript
-- 转盘库: Winwheel.js + GSAP
-- 后端: Node.js, Express.js
-- 鉴权: JWT (JSON Web Token)
-- 数据存储: JSON 文件
-- 其他: UUID (抽奖码生成), Bootstrap Icons
+1. **Basic Info**:
+   - Name and description
+   - Coward option (guaranteed prize)
 
-## 注意事项
+2. **Prize Options**:
+   - Prize name
+   - Winning probability (%)
+   - Stock quantity (0 = unlimited)
+   - Range prizes (min-max values with units)
+   - Redemption codes/card keys
 
-- 抽奖码为一次性使用
-- 中奖率总和不能超过100%
-- 数据存储在 `data/` 目录的 JSON 文件中
-- 建议定期备份 `data/` 目录
-- 所有管理 API 都需要 JWT Token 鉴权
-- Token 有效期为 24 小时
-- 生产环境请修改 `server.js` 中的 JWT 密钥
+3. **Security Settings**:
+   - Limit by browser fingerprint
+   - Limit by IP address
+   - Require email collection
+
+### Blacklist (Fixed Prize) System
+
+Admins can set fixed prizes for specific lottery codes:
+- Single or batch code selection
+- Choose specific prize
+- For range prizes:
+  - Random within original range
+  - Specific value
+  - Custom range
+
+### Inventory Management
+
+Track prize inventory in real-time:
+- Total stock vs. used stock
+- Remaining quantity
+- Redemption code availability
+- Per-lottery breakdown
+
+### Data Export
+
+Export lottery data to CSV:
+- **Results Export**: Code, prize, timestamp, type, fingerprint, IP, email
+- **Codes Export**: Code, status, creation time
+
+## Security Features
+
+1. **JWT Authentication**: 24-hour token expiry with automatic refresh
+2. **Browser Fingerprinting**: Unique device identification using FingerprintJS
+3. **IP Tracking**: request-ip middleware for accurate IP detection
+4. **Rate Limiting**: One draw per code, optional fingerprint/IP restrictions
+5. **Session Management**: Automatic logout on token expiration
+
+## Customization
+
+### Changing JWT Secret
+
+Edit `server.js`:
+```javascript
+app.set('jwtSecret', 'your-secret-key-here');
+```
+
+### Modifying Theme Colors
+
+Edit `public/admin.html` and `public/lottery.html`:
+```html
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
+```
+
+Available themes: indigo, blue, red, pink, purple, etc.
+
+### Adjusting Wheel Size
+
+Edit `public/js/lottery.js` in the `initWheel()` function:
+```javascript
+let canvasSize, outerRadius, fontSize;
+if (isSmallMobile) {
+  canvasSize = 280;
+  outerRadius = 130;
+  fontSize = 12;
+}
+```
+
+## Development
+
+### Running in Development Mode
+
+```bash
+pnpm run dev
+# or
+npm run dev
+```
+
+This uses nodemon for auto-restart on file changes.
+
+### Data Storage
+
+All data is stored in JSON files in the `data/` directory:
+- Simple and portable
+- No database setup required
+- Easy to backup and migrate
+
+**Note**: For production use with high traffic, consider migrating to a proper database (MongoDB, PostgreSQL, etc.)
+
+## Browser Support
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## License
+
+MIT License - feel free to use for personal or commercial projects.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Support
+
+For issues and questions, please open an issue on GitHub.
+
+## Changelog
+
+### Version 1.0.0
+- Initial release
+- Complete lottery management system
+- Admin panel with authentication
+- User lottery interface with spinning wheel
+- Browser fingerprint and IP tracking
+- Inventory management
+- CSV export functionality
+- Dark/Light theme support
+- Mobile responsive design
