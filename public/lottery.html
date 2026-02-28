@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>抽奖</title>
+  <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
+  
+  <div class="mdui-container lottery-container">
+    <!-- 抽奖标题和描述 -->
+    <div id="lotteryHeader" style="display: none;" class="mdui-card lottery-card">
+      <div class="mdui-card-content mdui-text-center">
+        <div class="mdui-typo-display-1" id="headerTitle"></div>
+        <div class="mdui-typo-body-1 mdui-text-color-theme-secondary mdui-m-t-1" id="headerDesc"></div>
+      </div>
+    </div>
+
+    <!-- 跑马灯 -->
+    <div id="marqueeContainer" style="display: none;" class="marquee-container mdui-m-t-2">
+      <div class="marquee-content">
+        <i class="mdui-icon material-icons">notifications_active</i>
+        <span id="marqueeText">加载中...</span>
+      </div>
+    </div>
+    
+    <!-- 输入抽奖码 -->
+    <div id="codeInput" class="mdui-card lottery-card">
+      <div class="mdui-card-content">
+        <div class="mdui-typo-display-1 mdui-text-center">欢迎参与抽奖</div>
+        <div class="mdui-textfield mdui-m-t-3">
+          <label class="mdui-textfield-label">请输入抽奖码</label>
+          <input class="mdui-textfield-input" type="text" id="lotteryCode"/>
+        </div>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-btn-block mdui-m-t-2" onclick="verifyCode()">
+          开始抽奖
+        </button>
+      </div>
+    </div>
+
+    <!-- 抽奖界面 -->
+    <div id="lotteryMain" style="display: none;">
+      <div class="mdui-card lottery-card">
+        <div class="mdui-card-content">
+          <div class="mdui-typo-headline mdui-text-center" id="lotteryTitle"></div>
+          <div class="mdui-typo-body-1 mdui-text-center mdui-text-color-theme-secondary mdui-m-t-1" id="lotteryDesc"></div>
+          
+          <!-- 转盘 -->
+          <div class="wheel-container mdui-m-t-3">
+            <div class="wheel-wrapper">
+              <div class="wheel-pointer"></div>
+              <canvas id="wheelCanvas" width="400" height="400"></canvas>
+            </div>
+            <button class="wheel-button mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="startDraw()" id="drawBtn">
+              开始抽奖
+            </button>
+          </div>
+
+          <div id="cowardSection" style="display: none;" class="mdui-text-center mdui-m-t-2">
+            <button class="mdui-btn mdui-btn-outlined mdui-ripple" onclick="chooseCoward()">
+              选择保底奖励
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 结果显示 -->
+    <div id="resultDisplay" style="display: none;">
+      <div class="mdui-card lottery-card">
+        <div class="mdui-card-content mdui-text-center">
+          <div class="mdui-typo-display-2" id="resultTitle"></div>
+          <div class="mdui-typo-headline mdui-m-t-2" id="resultPrize"></div>
+          <div class="mdui-typo-body-1 mdui-text-color-theme-secondary mdui-m-t-1" id="resultTime"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主题切换按钮 -->
+    <button class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme" onclick="toggleTheme()">
+      <i class="mdui-icon material-icons" id="themeIcon">brightness_4</i>
+    </button>
+  </div>
+
+  <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/zarocknz/javascript-winwheel@master/Winwheel.min.js"></script>
+  <script src="js/lottery.js"></script>
+</body>
+</html>

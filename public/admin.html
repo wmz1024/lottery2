@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>抽奖管理系统 - 管理后台</title>
+  <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink mdui-appbar-with-toolbar">
+  
+  <!-- 登录对话框 -->
+  <div id="loginDialog" class="mdui-dialog">
+    <div class="mdui-dialog-title">管理员登录</div>
+    <div class="mdui-dialog-content">
+      <div class="mdui-textfield">
+        <label class="mdui-textfield-label">用户名</label>
+        <input class="mdui-textfield-input" type="text" id="username"/>
+      </div>
+      <div class="mdui-textfield">
+        <label class="mdui-textfield-label">密码</label>
+        <input class="mdui-textfield-input" type="password" id="password"/>
+      </div>
+    </div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" onclick="login()">登录</button>
+    </div>
+  </div>
+
+  <!-- 顶部导航栏 -->
+  <header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+      <span class="mdui-typo-title">抽奖管理系统</span>
+      <div class="mdui-toolbar-spacer"></div>
+    </div>
+  </header>
+
+  <!-- 主内容 -->
+  <div class="container-fluid" style="margin-top: 80px; padding: 20px;">
+    <div class="row mb-3">
+      <div class="col-12">
+        <button class="btn btn-primary" onclick="showCreateDialog()">
+          <i class="bi bi-plus-circle"></i> 创建抽奖活动
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card admin-card">
+          <div class="card-body">
+            <h5 class="card-title">抽奖活动列表</h5>
+            <div class="table-responsive">
+              <table class="table table-hover" id="lotteriesTable">
+                <thead>
+                  <tr>
+                    <th>活动名称</th>
+                    <th>描述</th>
+                    <th>选项数</th>
+                    <th>懦夫选项</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="lotteriesList">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 创建/编辑抽奖对话框 -->
+  <div id="lotteryDialog" class="mdui-dialog">
+    <div class="mdui-dialog-title" id="dialogTitle">创建抽奖活动</div>
+    <div class="mdui-dialog-content">
+      <div class="mdui-textfield">
+        <label class="mdui-textfield-label">活动名称</label>
+        <input class="mdui-textfield-input" type="text" id="lotteryName"/>
+      </div>
+      <div class="mdui-textfield">
+        <label class="mdui-textfield-label">活动描述</label>
+        <textarea class="mdui-textfield-input" id="lotteryDesc"></textarea>
+      </div>
+      <div class="mdui-textfield">
+        <label class="mdui-textfield-label">懦夫选项（可选）</label>
+        <input class="mdui-textfield-input" type="text" id="cowardOption" placeholder="用户可直接获得此奖项"/>
+      </div>
+      
+      <div class="mdui-typo-subheading mdui-m-t-2">抽奖选项</div>
+      <div id="optionsList"></div>
+      <button class="mdui-btn mdui-btn-outlined mdui-ripple mdui-m-t-1" onclick="addOption()">
+        <i class="mdui-icon material-icons">add</i> 添加选项
+      </button>
+      <div class="mdui-m-t-2">
+        <span>总中奖率: <strong id="totalProb">0</strong>%</span>
+        <span class="mdui-m-l-2">不中奖率: <strong id="noWinProb">100</strong>%</span>
+      </div>
+    </div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+      <button class="mdui-btn mdui-ripple mdui-color-theme-accent" onclick="saveLottery()">保存</button>
+    </div>
+  </div>
+
+  <!-- 抽奖码管理对话框 -->
+  <div id="codesDialog" class="mdui-dialog codes-dialog-large">
+    <div class="mdui-dialog-title">抽奖码管理</div>
+    <div class="mdui-dialog-content">
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <input class="form-control" type="number" id="codeCount" value="10" placeholder="生成数量"/>
+        </div>
+        <div class="col-md-9">
+          <button class="btn btn-primary me-2" onclick="generateCodes()">
+            <i class="bi bi-plus-circle"></i> 生成抽奖码
+          </button>
+          <button class="btn btn-success me-2" onclick="exportCodes()">
+            <i class="bi bi-download"></i> 导出CSV
+          </button>
+          <button class="btn btn-secondary me-2" id="selectAllBtn" onclick="selectAllCodes()">
+            全选
+          </button>
+          <button class="btn btn-warning" onclick="batchSetFixedPrize()">
+            <i class="bi bi-magic"></i> 批量设置黑幕
+          </button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th width="40"><input type="checkbox" class="form-check-input" onclick="selectAllCodes()"></th>
+              <th>抽奖码</th>
+              <th>状态</th>
+              <th>黑幕设置</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="codesList">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+    </div>
+  </div>
+
+  <!-- 黑幕设置对话框 -->
+  <div id="fixedPrizeDialog" class="mdui-dialog">
+    <div class="mdui-dialog-title" id="fixedPrizeTitle">设置黑幕</div>
+    <div class="mdui-dialog-content">
+      <div class="mdui-textfield">
+        <label class="mdui-textfield-label">选择奖品</label>
+        <select class="mdui-textfield-input" id="fixedPrizeSelect" onchange="onPrizeSelectChange()">
+          <option value="">选择奖品</option>
+        </select>
+      </div>
+      
+      <div id="rangeOptions" style="display: none;">
+        <div class="mdui-typo-caption mdui-m-t-2 mdui-m-b-1">区间奖品设置</div>
+        <div class="mdui-textfield">
+          <label class="mdui-textfield-label">区间类型</label>
+          <select class="mdui-textfield-input" id="rangeType" onchange="onRangeTypeChange()">
+            <option value="random">随机（在原区间内随机）</option>
+            <option value="specific">指定数值</option>
+            <option value="custom">自定义区间</option>
+          </select>
+        </div>
+        
+        <div id="specificValueSection" style="display: none;">
+          <div class="mdui-textfield">
+            <label class="mdui-textfield-label">具体数值</label>
+            <input class="mdui-textfield-input" type="number" id="specificValue" step="any"/>
+            <span class="mdui-textfield-helper" id="unitDisplay"></span>
+          </div>
+        </div>
+        
+        <div id="customRangeSection" style="display: none;">
+          <div class="row">
+            <div class="col-6">
+              <div class="mdui-textfield">
+                <label class="mdui-textfield-label">最小值</label>
+                <input class="mdui-textfield-input" type="number" id="rangeMin" step="any"/>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mdui-textfield">
+                <label class="mdui-textfield-label">最大值</label>
+                <input class="mdui-textfield-input" type="number" id="rangeMax" step="any"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" onclick="cancelFixedPrize()">取消</button>
+      <button class="mdui-btn mdui-ripple mdui-color-theme-accent" onclick="saveFixedPrize()">保存</button>
+    </div>
+  </div>
+
+  <!-- 抽奖结果对话框 -->
+  <div id="resultsDialog" class="mdui-dialog codes-dialog-large">
+    <div class="mdui-dialog-title">抽奖结果</div>
+    <div class="mdui-dialog-content">
+      <button class="btn btn-success mb-3" onclick="exportResults()">
+        <i class="bi bi-download"></i> 导出CSV
+      </button>
+      <div class="table-responsive">
+        <table class="table table-sm table-hover">
+          <thead>
+            <tr>
+              <th>抽奖码</th>
+              <th>中奖选项</th>
+              <th>抽奖时间</th>
+              <th>类型</th>
+            </tr>
+          </thead>
+          <tbody id="resultsList">
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

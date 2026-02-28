@@ -1,0 +1,496 @@
+/* 暗色主题 */
+body.mdui-theme-layout-dark {
+  background-color: #121212;
+}
+
+.mdui-theme-layout-dark .mdui-card {
+  background-color: #1e1e1e;
+}
+
+.mdui-theme-layout-dark .mdui-dialog {
+  background-color: #1e1e1e;
+}
+
+.mdui-theme-layout-dark .admin-card {
+  background-color: #1e1e1e;
+  color: #fff;
+}
+
+.mdui-theme-layout-dark .table {
+  color: #fff;
+}
+
+.mdui-theme-layout-dark .table-hover tbody tr:hover {
+  background-color: #2a2a2a;
+}
+
+.mdui-theme-layout-dark .btn-outline-primary,
+.mdui-theme-layout-dark .btn-outline-info,
+.mdui-theme-layout-dark .btn-outline-success,
+.mdui-theme-layout-dark .btn-outline-secondary,
+.mdui-theme-layout-dark .btn-outline-danger {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mdui-theme-layout-dark .btn-outline-primary:hover {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.mdui-theme-layout-dark .btn-outline-info:hover {
+  background-color: #0dcaf0;
+  border-color: #0dcaf0;
+}
+
+.mdui-theme-layout-dark .btn-outline-success:hover {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.mdui-theme-layout-dark .btn-outline-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.mdui-theme-layout-dark .btn-outline-danger:hover {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+/* 抽奖卡片 */
+.lottery-card {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.lottery-container {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .lottery-container {
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  .lottery-card {
+    margin: 10px auto;
+    padding: 15px;
+  }
+}
+
+/* 转盘样式 */
+.wheel-container {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.wheel-wrapper {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  max-width: 100%;
+}
+
+#wheelCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 指针样式 */
+.wheel-pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 40px solid #E91E63;
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+
+.wheel-button {
+  width: 200px;
+  max-width: 100%;
+}
+
+/* 移动端转盘优化 */
+@media (max-width: 768px) {
+  .wheel-container {
+    max-width: 350px;
+  }
+  
+  .wheel-wrapper {
+    width: 320px;
+    height: 320px;
+  }
+  
+  .wheel-pointer {
+    border-left-width: 15px;
+    border-right-width: 15px;
+    border-top-width: 30px;
+  }
+  
+  .wheel-pointer::after {
+    width: 24px;
+    height: 24px;
+    left: -12px;
+    top: -30px;
+  }
+  
+  .wheel-button {
+    width: 160px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wheel-wrapper {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .wheel-pointer {
+    border-left-width: 12px;
+    border-right-width: 12px;
+    border-top-width: 24px;
+  }
+  
+  .wheel-pointer::after {
+    width: 20px;
+    height: 20px;
+    left: -10px;
+    top: -24px;
+  }
+}
+
+/* 选项卡片 */
+.option-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fafafa;
+}
+
+.mdui-theme-layout-dark .option-card {
+  border-color: #424242;
+  background: #2a2a2a;
+}
+
+.range-section {
+  background: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+  border: 1px dashed #ccc;
+}
+
+.mdui-theme-layout-dark .range-section {
+  background: #1e1e1e;
+  border-color: #555;
+}
+
+/* 抽奖活动卡片 */
+.lottery-item {
+  margin-bottom: 20px;
+}
+
+/* 代码列表 */
+.code-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mdui-theme-layout-dark .code-item {
+  border-bottom-color: #424242;
+}
+
+.code-item.used {
+  opacity: 0.5;
+}
+
+/* 结果列表 */
+.result-item {
+  padding: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mdui-theme-layout-dark .result-item {
+  border-bottom-color: #424242;
+}
+
+/* 响应式 */
+@media (max-width: 600px) {
+  .wheel-container {
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .wheel-wrapper {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .wheel-pointer {
+    border-left-width: 15px;
+    border-right-width: 15px;
+    border-top-width: 30px;
+  }
+  
+  .wheel-pointer::after {
+    width: 24px;
+    height: 24px;
+    left: -12px;
+    top: -30px;
+  }
+}
+
+/* 移动端文字大小优化 */
+@media (max-width: 768px) {
+  .mdui-typo-display-1 {
+    font-size: 28px !important;
+  }
+  
+  .mdui-typo-display-2 {
+    font-size: 32px !important;
+  }
+  
+  .mdui-typo-headline {
+    font-size: 20px !important;
+  }
+  
+  .mdui-typo-body-1 {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .mdui-typo-display-1 {
+    font-size: 24px !important;
+  }
+  
+  .mdui-typo-display-2 {
+    font-size: 28px !important;
+  }
+  
+  .mdui-typo-headline {
+    font-size: 18px !important;
+  }
+}
+
+/* 动画 */
+.spinning {
+  animation: spin 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+/* 按钮样式优化 */
+.mdui-btn-block {
+  width: 100%;
+}
+
+/* 跑马灯样式 */
+.marquee-container {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 12px 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mdui-theme-layout-dark .marquee-container {
+  background: linear-gradient(135deg, #434343 0%, #000000 100%);
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font-size: 14px;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee-content i {
+  font-size: 18px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.marquee-item {
+  display: inline-block;
+  margin: 0 30px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.marquee-item .user-id {
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.marquee-item .prize {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 移动端跑马灯优化 */
+@media (max-width: 768px) {
+  .marquee-container {
+    padding: 10px 15px;
+    border-radius: 6px;
+  }
+  
+  .marquee-content {
+    font-size: 12px;
+    gap: 8px;
+  }
+  
+  .marquee-content i {
+    font-size: 16px;
+  }
+  
+  .marquee-item {
+    margin: 0 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+  }
+}
+
+/* 对话框优化 */
+.mdui-dialog {
+  max-width: 600px;
+}
+
+.mdui-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* 大对话框 */
+.codes-dialog-large {
+  max-width: 900px;
+  width: 90%;
+}
+
+.codes-dialog-large .mdui-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* 管理卡片 */
+.admin-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+/* 表格优化 */
+.table-responsive {
+  border-radius: 4px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table th {
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.btn-group-sm .btn {
+  padding: 0.25rem 0.5rem;
+}
+
+/* 移动端表格优化 */
+@media (max-width: 768px) {
+  .table {
+    font-size: 12px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .btn-group-sm .btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 11px;
+  }
+  
+  .btn-group-sm .btn i {
+    font-size: 12px;
+  }
+  
+  .badge {
+    font-size: 10px;
+    padding: 0.25em 0.5em;
+  }
+}
+
+/* 主题切换按钮 - 移动端优化 */
+.mdui-fab-fixed {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .mdui-fab-fixed {
+    right: 15px;
+    bottom: 15px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .mdui-fab-fixed .mdui-icon {
+    font-size: 20px;
+  }
+}
